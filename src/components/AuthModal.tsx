@@ -56,7 +56,9 @@ export function AuthModal({ isOpen, onClose }: Props) {
     } catch (err: any) {
       console.error(err);
       let msg = err?.message || 'Authentication failed';
-      if (msg.includes('auth/operation-not-allowed')) {
+      if (msg.includes('auth/unauthorized-domain')) {
+        msg = `Unauthorized Domain: Google Sign-In requires "${window.location.hostname}" to be authorized in your Firebase Console under Authentication > Settings > Authorized domains.`;
+      } else if (msg.includes('auth/operation-not-allowed')) {
         msg = 'Email/Password sign-in is not enabled in your Firebase Console. Please enable Email/Password under Authentication > Sign-in method in Firebase Console.';
       } else if (msg.includes('auth/invalid-credential') || msg.includes('auth/user-not-found') || msg.includes('auth/wrong-password')) {
         msg = 'Invalid email or password. Please verify and try again.';
