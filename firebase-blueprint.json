@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "Workspace": {
+      "title": "Workspace",
+      "description": "Single shared ministry finance workspace for BCC: Reload",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "teamCode": { "type": "string", "maxLength": 30 },
+        "ownerUid": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "teamCode", "ownerUid", "createdAt"]
+    },
+    "Member": {
+      "title": "Member",
+      "description": "An authorized workspace member with a designated role (admin, encoder, viewer)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 200 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "role": { "type": "string", "enum": ["admin", "encoder", "viewer"] },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "role", "joinedAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial inflow, outflow, offering breakdown, or voucher entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["inflow", "outflow"] },
+        "amount": { "type": "number" },
+        "whatPurchased": { "type": "string", "maxLength": 500 },
+        "whyPurchased": { "type": "string", "maxLength": 500 },
+        "fromWhere": { "type": "string", "maxLength": 200 },
+        "account": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 100 },
+        "date": { "type": "string" },
+        "loggedBy": { "type": "string", "maxLength": 100 },
+        "encoderUid": { "type": "string", "maxLength": 128 },
+        "encoderEmail": { "type": "string", "maxLength": 200 },
+        "tags": { "type": "array" },
+        "receiptImage": { "type": "string" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "offeringBreakdown": { "type": "object" },
+        "sendEmailCopy": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "amount", "whatPurchased", "account", "category", "date", "loggedBy", "encoderUid", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A discussion comment or verification note under a specific transaction entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "transactionId": { "type": "string", "maxLength": 128 },
+        "authorUid": { "type": "string", "maxLength": 128 },
+        "authorName": { "type": "string", "maxLength": 100 },
+        "authorEmail": { "type": "string", "maxLength": 200 },
+        "authorPhoto": { "type": "string", "maxLength": 500 },
+        "content": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "transactionId", "authorUid", "authorName", "content", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Real-time push notification for entry creations or comment replies",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["entry_created", "comment_reply"] },
+        "title": { "type": "string", "maxLength": 200 },
+        "message": { "type": "string", "maxLength": 500 },
+        "targetId": { "type": "string", "maxLength": 128 },
+        "actorUid": { "type": "string", "maxLength": 128 },
+        "actorName": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "readBy": { "type": "array" }
+      },
+      "required": ["id", "type", "title", "message", "actorUid", "actorName", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/workspaces/{workspaceId}": {
+      "schema": { "$ref": "#/entities/Workspace" },
+      "description": "Single shared ministry finance workspace document"
+    },
+    "/workspaces/{workspaceId}/members/{memberId}": {
+      "schema": { "$ref": "#/entities/Member" },
+      "description": "Members authorized to access the workspace with role definitions"
+    },
+    "/workspaces/{workspaceId}/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "Financial ledger transactions and offering counts"
+    },
+    "/workspaces/{workspaceId}/transactions/{transactionId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/Comment" },
+      "description": "Real-time comment thread for entries"
+    },
+    "/workspaces/{workspaceId}/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Real-time push and in-app activity notifications"
+    }
+  }
+}

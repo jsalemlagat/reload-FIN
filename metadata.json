@@ -1,0 +1,10 @@
+{
+  "name": "Offering monitoring & tracking",
+  "description": "Shared mobile finance tracking for church and ministry teams with Philippine cash breakdown, AI receipt scanning, real-time sync, and PDF/CSV reporting.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
