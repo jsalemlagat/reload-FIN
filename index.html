@@ -20,6 +20,14 @@
   </head>
   <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
     <div id="root"></div>
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.message && e.message.includes('WebSocket')) {
+          e.preventDefault();
+          return true;
+        }
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
