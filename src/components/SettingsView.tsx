@@ -13,16 +13,9 @@ import {
   Share2, 
   Check, 
   Copy,
-  FolderTree,
-  Smartphone,
-  Sparkles,
-  Globe,
-  ExternalLink,
-  ShieldCheck
+  FolderTree
 } from 'lucide-react';
-import { InstallInfographicModal } from './InstallInfographicModal';
 import { useAuth } from '../context/AuthContext';
-import firebaseConfig from '../../firebase-applet-config.json';
 
 export default function SettingsView() {
   const { 
@@ -46,8 +39,6 @@ export default function SettingsView() {
   const [inflowCatInput, setInflowCatInput] = useState('');
   const [outflowCatInput, setOutflowCatInput] = useState('');
   const [tagInput, setTagInput] = useState('');
-  const [showInstallModal, setShowInstallModal] = useState(false);
-  const [firebaseDomainCopied, setFirebaseDomainCopied] = useState(false);
 
   const backupInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -105,48 +96,6 @@ export default function SettingsView() {
         </p>
       </div>
 
-      {/* PWA Mobile App & Authorized Member Setup Infographic Card */}
-      <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 text-white border border-indigo-500/30 shadow-lg space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
-              <Smartphone className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
-                PWA Mobile App & Installation Guide
-                <span className="px-2 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full font-semibold">
-                  Infographic
-                </span>
-              </h2>
-              <p className="text-xs text-slate-300">
-                Easy step-by-step instructions for Android, iPhone Safari, and Desktop members
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="px-3.5 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-bold rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Open Infographic</span>
-          </button>
-        </div>
-
-        <div className="text-xs text-slate-300 bg-white/5 p-3 rounded-xl border border-white/10 flex items-center justify-between gap-3">
-          <span>
-            Authorized members (like <strong>Bem</strong>) can install this app directly on their home screen for fullscreen offline access and camera receipt scans.
-          </span>
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="text-emerald-400 hover:underline font-semibold shrink-0 text-xs"
-          >
-            View Steps &rarr;
-          </button>
-        </div>
-      </div>
-
       {/* Cloud Sync & Team Code Card */}
       <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         <div className="flex items-center gap-2">
@@ -194,82 +143,6 @@ export default function SettingsView() {
             Connect Team
           </button>
         </form>
-      </div>
-
-      {/* Firebase Console & Domain Allowlist Card */}
-      <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Globe className="w-5 h-5 text-indigo-500" />
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                Firebase Auth & Domain Setup
-                <span className="px-2 py-0.5 text-[10px] bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-full font-bold">
-                  {firebaseConfig.projectId || 'tokyo-vault-q0z9n'}
-                </span>
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Fix for "auth/unauthorized-domain" on mobile phones & external browsers
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-xs text-slate-600 dark:text-slate-300 space-y-2 bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60">
-          <div className="font-semibold text-slate-800 dark:text-slate-200">
-            Current App Domain (Copy & paste into Firebase Console):
-          </div>
-          <div className="flex items-center justify-between gap-2 p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
-            <code className="font-mono text-xs text-indigo-600 dark:text-indigo-400 truncate select-all">
-              {typeof window !== 'undefined' ? window.location.hostname : ''}
-            </code>
-            <button
-              onClick={() => {
-                if (typeof window !== 'undefined') {
-                  navigator.clipboard.writeText(window.location.hostname);
-                  setFirebaseDomainCopied(true);
-                  setTimeout(() => setFirebaseDomainCopied(false), 2000);
-                }
-              }}
-              className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-1 shadow-xs transition shrink-0"
-            >
-              {firebaseDomainCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{firebaseDomainCopied ? 'Copied' : 'Copy Domain'}</span>
-            </button>
-          </div>
-
-          <div className="pt-2 text-[11px] space-y-1 text-slate-500 dark:text-slate-400">
-            <div className="font-semibold text-slate-700 dark:text-slate-300">Quick 2-step setup in Firebase:</div>
-            <div>
-              1. <strong>Authorize Domain:</strong> Click button below &rarr; Scroll to <em>Authorized domains</em> &rarr; Click <em>Add domain</em> &rarr; Paste your domain and save.
-            </div>
-            <div>
-              2. <strong>Enable Email/Password (Optional):</strong> Go to <em>Sign-in method</em> &rarr; Click <em>Email/Password</em> &rarr; Toggle <em>Enable</em> &rarr; Save.
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2 pt-1">
-          <a
-            href={`https://console.firebase.google.com/project/${firebaseConfig.projectId || 'tokyo-vault-q0z9n'}/authentication/settings`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition active:scale-95"
-          >
-            <span>Open Authorized Domains Settings</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-
-          <a
-            href={`https://console.firebase.google.com/project/${firebaseConfig.projectId || 'tokyo-vault-q0z9n'}/authentication/providers`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition active:scale-95"
-          >
-            <span>Open Sign-in Providers</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        </div>
       </div>
 
       {/* Cloud Backups & Data Export */}
@@ -550,12 +423,6 @@ export default function SettingsView() {
           Reset Data
         </button>
       </div>
-
-      <InstallInfographicModal
-        isOpen={showInstallModal}
-        onClose={() => setShowInstallModal(false)}
-        teamCode={teamData.teamCode}
-      />
     </div>
   );
 }
