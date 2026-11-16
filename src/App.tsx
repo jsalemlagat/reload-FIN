@@ -9,7 +9,7 @@ import BudgetView from './components/BudgetView';
 import SettingsView from './components/SettingsView';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { usePWAInstall } from './hooks/usePWAInstall';
-
+import { NotificationToast } from './components/NotificationToast';
 import { AuthProvider } from './context/AuthContext';
 
 function MainContent() {
@@ -26,18 +26,26 @@ function MainContent() {
   );
 }
 
-export default function App() {
+function AppContent() {
   const { isOnline } = usePWAInstall();
+  const { toastMessage, clearToast } = useFinance();
 
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+      <OfflineIndicator isOnline={isOnline} />
+      <NotificationToast message={toastMessage} onClose={clearToast} />
+      <TopBar />
+      <MainContent />
+      <BottomNav />
+    </div>
+  );
+}
+
+export default function App() {
   return (
     <AuthProvider>
       <FinanceProvider>
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-          <OfflineIndicator isOnline={isOnline} />
-          <TopBar />
-          <MainContent />
-          <BottomNav />
-        </div>
+        <AppContent />
       </FinanceProvider>
     </AuthProvider>
   );

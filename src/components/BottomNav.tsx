@@ -4,7 +4,9 @@ import { ViewTab } from '../types/finance';
 import { LayoutDashboard, Receipt, FileText, PiggyBank, Settings } from 'lucide-react';
 
 export default function BottomNav() {
-  const { activeTab, setActiveTab } = useFinance();
+  const { activeTab, setActiveTab, isEntryFormOpen } = useFinance();
+
+  if (isEntryFormOpen) return null;
 
   const tabs: { id: ViewTab; label: string; icon: React.FC<{ className?: string }> }[] = [
     { id: 'dashboard', label: 'Treasury', icon: LayoutDashboard },
@@ -15,7 +17,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="no-print fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 transition-colors">
+    <nav className="no-print fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-md mx-auto grid grid-cols-5 h-16 items-center px-1">
         {tabs.map((tab) => {
           const Icon = tab.icon;
